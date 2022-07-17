@@ -2,39 +2,42 @@ package kirjalista;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.time.LocalDate;
 import java.util.Random;
 
 /**
  * Kirjalistan kirja joka osaa mm. itse huolehtia tunnusNro:staan.
  *
  * @author Aapo Anttila
- * @version 1.0, 22.02.2003
+ * @version 1.0, 17.07.2022
  */
 
 
 public class Kirja {
-	private int tunnusNro;
+	private int tunnusNro;    
+	/// private int kirjaNro;
 	private String kirjanimi = "";
 	private String kirjailija = "";
 	private int vuosi;
 	private String kieli = "";
 	private int sivumaara;
     private static int seuraavaNro = 1;
-	
+    private String tila; ;
+    private int arvosana;
+    private LocalDate aloitusPvm;
+    private LocalDate lopetusPvm;
     
-    public Kirja() {
-    	/////////
+    
+    /**
+     * Oletus muodostaja
+     */
+    public Kirja() {	
     }
     
-    public Kirja(int tunnusNro, String kirjanimi, String kirjailija, int vuosi, String kieli, int sivumaara) {
-    	this.tunnusNro = tunnusNro;
-    	this.kirjanimi = kirjanimi;
-    	this.kirjailija = kirjailija;
-    	this.vuosi = vuosi;
-    	this.kieli = kieli;
-    	this.sivumaara = sivumaara;
-    }
-    
+    /**
+     * Tulostetaan kirjan tiedot
+     * @param out tietovirta johon tulostetaan
+     */
 	public void tulosta(PrintStream out) {
 		out.println(String.format("%03d", tunnusNro, 3) + "  " + kirjanimi);
 	    out.println(" Kirjoittanut " + kirjailija);
@@ -42,48 +45,147 @@ public class Kirja {
 	    out.println(" Kieli: " + kieli);
         out.println(" Sivuja " + sivumaara);
     }
-	
-    public void tulosta(OutputStream os) {
-        tulosta(new PrintStream(os));
-    }
-    
+		
+    /**
+     * Antaa kirjalle seuraavan rekisterinumeron.
+     * @return kirjan uusi tunnusNro
+     * @example
+     * <pre name="test">
+     *   Kirja b1 = new Kirja();
+     *   b1.getTunnusNro() === 0;
+     *   b1.rekisteroi();
+     *   Kirja b2 = new Kirja();
+     *   b2.rekisteroi();
+     *   int n1 = b1.getTunnusNro();
+     *   int n2 = b2.getTunnusNro();
+     *   n1 === n2-1;
+     * </pre>
+     */
     public int rekisteroi() {
     	tunnusNro = seuraavaNro;
         seuraavaNro++;
         return tunnusNro;
     }
     
+    /**
+     * Palauttaa kirjan nimen
+     * @return kirjan nimi
+     * @example
+     * <pre name="test">
+     * 	Kirja b1 = new Kirja();
+     * 	b1.vastaaValtio();
+     *  b1.getNimi() =R= "Valtio.*";
+     * </pre>
+     */
     public String getNimi() {
     	return kirjanimi;
     }
     
+    /**
+     * Palauttaa kirjailijan nimen
+     * @return kirjailijan nimi
+     * @example
+     * <pre name="test">
+     * 	Kirja b1 = new Kirja();
+     * 	b1.vastaaValtio();
+     *  b1.getKirjailija() =R= "Pratchett.*";
+     *  </pre>
+     */
     public String getKirjailija() {
     	return kirjailija;
     }
     
+    /**
+     * Palauttaa kirjan tunnusnumeron
+     * @return kirjan tunnusnumero
+     */
     public int getTunnusNro() {
     	return tunnusNro;
     }
     
+    /**
+     * @return kirjan kieli
+     * @example
+     * <pre name="test">
+     * 	Kirja b1 = new Kirja();
+     * 	b1.vastaaValtio();
+     *  b1.getKieli() =R= "Suomi.*";
+     *  </pre>
+     */
     public String getKieli() {
     	return kieli;
     }
     
+    /**
+     * @return sivum‰‰r‰
+     */
     public int getSivut() {
     	return sivumaara;
     }
     
+    /**
+     * @return julkaisu vuosi
+     */
     public int getVuosi() {
     	return vuosi;
     }
     
+    /**
+     * @return tila
+     */
+    public String getTila() {
+    	return tila;
+    }
+    
+    /**
+     * @return arvosana
+     */
+    public int getArvosana() {
+    	return arvosana;
+    }
+    
+    /**
+     * @return aloitusp‰iv‰m‰‰r‰
+     */
+    public LocalDate getAloitusPvm() {
+    	return aloitusPvm;	
+    }
+    
+    /**
+     * @return lopetusp‰iv‰m‰‰r‰
+     */
+    public LocalDate getLopetusPvm() {
+    	return lopetusPvm;
+    }
+    
+    /**
+     * apumetodi, joka muuttaa kokonaislukua vastaavan merkkijonon
+     * @param tila kirjan tila
+     * @return tila merkkijonona
+     */
+	public String tilaSanaksi(int tila) {
+    	if(tila == 0) return "Luettu";
+    	if(tila == 1) return "Kesken";
+    	if(tila == 2) return "Aion lukea";
+    	if(tila == 3) return "Lukeminen lopetettu";
+    	else return "Ei mit‰‰n";
+    }   
+    
+    /**
+     * asettaa kirjan attribuuteille arvoja
+     */
     public void vastaaValtio() {
-        kirjanimi = "Valtio ";
+        kirjanimi = "Valtio";
         kirjailija = "Pratchett, Terry";
         Random r = new Random();
         vuosi = 2000 + r.nextInt(20);
         kieli = "Suomi";
+        tila = tilaSanaksi(r.nextInt(5));
         sivumaara = r.nextInt(500);
+        aloitusPvm = LocalDate.of(2000 + r.nextInt(23), 1 + r.nextInt(11), 1 + r.nextInt(27));
+        lopetusPvm = aloitusPvm.plusMonths(6);
+        arvosana = r.nextInt(11);
+        
     }
     
     public String getKysymys(int k ) {
@@ -111,6 +213,11 @@ public class Kirja {
     	}
     }
     
+    
+    /**
+     * Testiohjelma Kirjalle
+     * @param args ei k‰ytet‰
+     */
     public static void main(String args[]) {
         Kirja  book1 = new Kirja(), book2 = new Kirja();
         
@@ -126,6 +233,8 @@ public class Kirja {
         book2.vastaaValtio();
         book2.tulosta(System.out);
     }
+
+
 
     
 

@@ -111,7 +111,11 @@
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextArea>
-                  <Button fx:id="kirjaMuokkaa" mnemonicParsing="false" onAction="#handleLisääTila" prefHeight="25.0" prefWidth="260.0" text="Lisää tila" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
+                  </TextField>
                </children>
             </GridPane>
          </center>

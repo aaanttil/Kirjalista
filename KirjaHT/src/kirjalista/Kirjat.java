@@ -7,35 +7,70 @@ public class Kirjat {
     private String           tiedostonNimi = "";
     private Kirja            alkiot[]      = new Kirja[MAX_KIRJOJA];
     
+    
+    /**
+     * Oletusmuodostaja
+     */
     public Kirjat() {
         alkiot = new Kirja[MAX_KIRJOJA];
     }
 
+    /**
+     * Lis‰‰ uuden kirjan tietorakenteeseen. Ottaa kirjan omistukseensa.
+     * @param kirja lis‰tt‰v‰n kirjan viite
+     * @throws SailoException jos tietorakenne on jo t‰ynn‰
+     * @example
+     * <pre name="test">
+     * 	
+     */
     public void lisaa(Kirja kirja) throws SailoException {
         if (lkm >= alkiot.length) throw new SailoException("Liikaa alkioita");
         alkiot[lkm] = kirja;
         lkm++;
     }
     
+    /**
+     * 
+     * @param i
+     * @return
+     * @throws IndexOutOfBoundsException
+     */
     public Kirja anna(int i) throws IndexOutOfBoundsException {
         if (i < 0 || lkm <= i)
             throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
         return alkiot[i];
     }    
     
+    /**
+     * 
+     * @param hakemisto
+     * @throws SailoException
+     */
     public void lueTiedostosta(String hakemisto) throws SailoException {
         tiedostonNimi = hakemisto + "/nimet.dat";
         throw new SailoException("Ei osata viel‰ lukea tiedostoa " + tiedostonNimi);
     }
 
+    /**
+     * 
+     * @throws SailoException
+     */
     public void talleta() throws SailoException {
         throw new SailoException("Ei osata viel‰ tallettaa tiedostoa " + tiedostonNimi);
     }  
     
+    /**
+     * 
+     * @return
+     */
     public int getLkm() {
         return lkm;
     }
 
+    /**
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
     	Kirjat kirjat = new Kirjat();
     	Kirja kirja1 = new Kirja();

@@ -1,9 +1,11 @@
 package kirja;
 
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import java.util.Collection;
@@ -13,7 +15,6 @@ import kirjalista.Kirja;
 import kirjalista.Kirjalista;
 import kirjalista.Avainsana;
 import kirjalista.SailoException;
-
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.TextAreaOutputStream;
 import fi.jyu.mit.fxgui.ComboBoxChooser;
@@ -39,9 +40,12 @@ public class KirjaGUIController {
 	@FXML private ComboBoxChooser<String> cbKentat;
 	@FXML private Label labelVirhe;
 	@FXML private ListChooser<Kirja> chooserKirjat;
-	    
-    @FXML private StringGrid<Kirja> tableKirjat;
 
+    @FXML private StringGrid<Kirja> tableKirjat;
+    
+    @FXML private ListChooser<Avainsana> listAvainsanat;
+    
+    
 	@FXML private TableView<Kirja> tableView;
 	@FXML private TableColumn<Kirja, String> kirjaNimi;
 	@FXML private TableColumn<Kirja, String> kirjailijaNimi;
@@ -63,7 +67,8 @@ public class KirjaGUIController {
 		else
 			naytaVirhe("Ei osata vielä hakea " + hakukentta + ": " + ehto);
 	}
-	   
+	
+   
 	@FXML private void handleTallenna() {
         tallenna();
 	}
@@ -78,6 +83,7 @@ public class KirjaGUIController {
 		ModalController.showModal(KirjaGUIController.class.getResource("KirjaMuokkausGUIView.fxml"), "Kirja", null, "");
 	}
 	
+
 	@FXML private void handleLisaaKirja() {
         ModalController.showModal(KirjaGUIController.class.getResource("KirjaMuokkausGUIView.fxml"), "Kirja", null, "");
 	}
@@ -85,10 +91,15 @@ public class KirjaGUIController {
 	@FXML private void handlePoistaKirja() {
         Dialogs.showMessageDialog("Ei osata vielä poistaa kirjaa");
 	}
-	
+	                   
+	@FXML private void handleLisaaAvainsana() {
+		uusiAvainsana();
+	}
+		
 	private void tallenna() {
 		Dialogs.showMessageDialog("Ei toimi vielä :(");
 	}
+	
 	
 	
 
@@ -128,15 +139,11 @@ public class KirjaGUIController {
     }
 
     
-    public void uusiAvainsana() { 
-        if ( kirjaKohdalla == null ) return;  
-        Avainsana avs = new Avainsana();  
-        avs.rekisteroi();  
-        avs.vastaaJotain(kirjaKohdalla.getTunnusNro());  
-        kirjalista.lisaa(avs);  
-        hae(kirjaKohdalla.getTunnusNro());          
-    } 
-   
+    @FXML void handleNaytaavainsanat() {
+		naytaAvainsana();
+    }
+
+       
     private void uusiKirja() {
         Kirja uusi = new Kirja();
         uusi.rekisteroi();
@@ -147,10 +154,10 @@ public class KirjaGUIController {
             Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
             return;
         }
-        tableKirjat.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()));
-
-        ////hae(uusi.getTunnusNro());
+        
+        tableKirjat.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString());      
     }
+   
     
     protected void hae(int knro) {
 
@@ -179,11 +186,31 @@ public class KirjaGUIController {
     }
     
     protected void alusta() {
-    	
+
     }
 
-    
+    private void naytaAvainsana() {	
+    	listAvainsanat.clear();
+    	System.out.println("avainsanat tulostettu");
+        Kirja uusi = tableKirjat.getObject();
+		List<Avainsana> avsanat = kirjalista.annaAvainsanat(uusi.getTunnusNro());
+        for (Avainsana avs:avsanat) {
+        	listAvainsanat.add(avs.getAvainsana(), avs);
+        }
 
+	}
+
+    
+    public void uusiAvainsana() { 
+       	Avainsana avs = new Avainsana();
+        Kirja uusi = tableKirjat.getObject();
+    	avs.rekisteroi();     
+    	int tunnus = uusi.getTunnusNro();
+    	System.out.println(tunnus);
+    	avs.vastaaJotain(tunnus);
+    	kirjalista.lisaa(avs);
+        naytaAvainsana();
+    } 
 }
 
 

@@ -1,7 +1,9 @@
 package kirja;
 
+import fi.jyu.mit.fxgui.StringGrid;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import kirjalista.Kirja;
 import kirjalista.Kirjalista;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -25,6 +27,7 @@ public class KirjaMain extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("Kirja");
             
+          
             Kirjalista kirjalista = new Kirjalista();
             kirjaCtrl.setKirjalista(kirjalista);
             
@@ -32,12 +35,15 @@ public class KirjaMain extends Application {
             	if (kirjaCtrl.voikoSulkea() ) event.consume();
             });
             
+
+            
             primaryStage.show();
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
-
+             
+    
     /**
      * @param args Ei käytössä
      */
