@@ -3,7 +3,9 @@ package kirjalista;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
+import fi.jyu.mit.ohj2.Mjonot;
 
 /**
  * Kirjalistan kirja joka osaa mm. itse huolehtia tunnusNro:staan.
@@ -24,15 +26,52 @@ public class Kirja {
     private static int seuraavaNro = 1;
     private String tila; ;
     private int arvosana;
-    private LocalDate aloitusPvm;
-    private LocalDate lopetusPvm;
-    
+    final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+    private LocalDate aloitusPvm = LocalDate.now();
+    private LocalDate lopetusPvm = LocalDate.now();
+
     
     /**
      * Oletus muodostaja
      */
     public Kirja() {	
     }
+    
+    private void setTunnusNro(int nr) {
+        tunnusNro = nr;
+        if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
+    }
+
+    @Override
+    public String toString() {
+        return "" +
+                getTunnusNro() + "|" +
+                kirjanimi + "|" +
+                kirjailija + "|" +
+                vuosi + "|" +
+                tila + "|" +
+                kieli + "|" +
+                sivumaara + "|" +
+                arvosana + "|" +
+                aloitusPvm + "|" +
+                lopetusPvm + "|"; 
+    }
+
+
+    public void parse(String rivi) {
+        var sb = new StringBuilder(rivi);
+        setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
+        kirjanimi = Mjonot.erota(sb, '|', kirjanimi);
+        kirjailija = Mjonot.erota(sb, '|', kirjailija);
+        vuosi = Mjonot.erota(sb, '|', vuosi);
+        tila = Mjonot.erota(sb, '|', tila);
+        kieli = Mjonot.erota(sb, '|', kieli);
+        sivumaara = Mjonot.erota(sb, '|', sivumaara);
+        arvosana = Mjonot.erota(sb, '|', arvosana);
+        ///aloitusPvm = LocalDate.parse(Mjonot.erota(sb, '|', "2000-01-01"), dtf);
+        ///lopetusPvm = LocalDate.parse(Mjonot.erota(sb, '|', "2000-01-01"), dtf);
+    }
+
     
     /**
      * Tulostetaan kirjan tiedot

@@ -1,6 +1,5 @@
 package kirja;
 
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -29,12 +28,19 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+
+
+
+
 /**
  * @author a3ant
  * @version 17.2.2022
  *
  */
 public class KirjaGUIController {
+   
+	
+	private Kirjalista kirjalista;
 
 	@FXML private TextField hakuehto;
 	@FXML private ComboBoxChooser<String> cbKentat;
@@ -45,19 +51,16 @@ public class KirjaGUIController {
     
     @FXML private ListChooser<Avainsana> listAvainsanat;
     
-    
-	@FXML private TableView<Kirja> tableView;
-	@FXML private TableColumn<Kirja, String> kirjaNimi;
+    @FXML private TableColumn<Kirja, String> kirjaNimi;
 	@FXML private TableColumn<Kirja, String> kirjailijaNimi;
 	@FXML private TableColumn<Kirja, Integer> vuosi;
 	@FXML private TableColumn<Kirja, Integer> arvosana;
 	@FXML private TableColumn<Kirja, String> tilaNimi;
+	@FXML private TableColumn<Kirja, Integer> kieli;
 	@FXML private TableColumn<Kirja, Integer> aloitusPvm;
 	@FXML private TableColumn<Kirja, Integer> lopetusPvm;
 	@FXML private TableColumn<Kirja, Integer> sivumaara;
 
-
-	
 	
 	@FXML private void handleHakuehto() {
 		String hakukentta = cbKentat.getSelectedText();
@@ -73,6 +76,11 @@ public class KirjaGUIController {
         tallenna();
 	}
 	
+	@FXML private void handleLueTiedosto() {
+		lueTiedosto();
+	}
+	
+	
 	@FXML private void handleLopeta() {
 		tallenna();
 		Platform.exit();
@@ -80,7 +88,7 @@ public class KirjaGUIController {
 	
 	
 	@FXML private void handleMuokkaaKirja() {
-		ModalController.showModal(KirjaGUIController.class.getResource("KirjaMuokkausGUIView.fxml"), "Kirja", null, "");
+			ModalController.showModal(KirjaGUIController.class.getResource("KirjaMuokkausGUIView.fxml"), "Kirja", null, "");
 	}
 	
 
@@ -95,12 +103,35 @@ public class KirjaGUIController {
 	@FXML private void handleLisaaAvainsana() {
 		uusiAvainsana();
 	}
-		
-	private void tallenna() {
-		Dialogs.showMessageDialog("Ei toimi viel‰ :(");
+	
+	
+	private String tallenna() {
+		try {
+			kirjalista.tallenna();
+			return null;
+		}	catch (SailoException ex) {
+            Dialogs.showMessageDialog("Tallennuksessa ongelmia! " + ex.getMessage());
+            return ex.getMessage();
+		}	
 	}
 	
-	
+	private String lueTiedosto() {
+		try {
+			kirjalista.lueTiedostosta();
+			Kirja uusi = new Kirja();
+			System.out.println("ok");
+			for(int i = 0; i < kirjalista.getKirjoja(); i++) {
+				uusi = kirjalista.annaKirja(i);
+		        tableKirjat.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), uusi.getKieli(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString());      
+			}		
+			return null;
+		} catch (SailoException e) {
+            String virhe = e.getMessage(); 
+            if ( virhe != null ) Dialogs.showMessageDialog(virhe);
+            return virhe;
+		}
+		
+	}
 	
 
 	private void naytaVirhe(String virhe) {	        
@@ -118,15 +149,12 @@ public class KirjaGUIController {
 	   ModalController.showModal(KirjaGUIController.class.getResource("aboutView.fxml"), "Kirja", null, "");
 	}
 	
-	public boolean voikoSulkea() {
+	public boolean voikoSulkea() throws SailoException {
 		 tallenna();
 		 return true;
 	 }
 	 
 	 
-    private Kirjalista kirjalista;
-    private Kirja kirjaKohdalla;
-    private TextArea areaKirja = new TextArea();
 
 
     @FXML private void handleUusiKirja() {   		
@@ -142,8 +170,13 @@ public class KirjaGUIController {
     @FXML void handleNaytaavainsanat() {
 		naytaAvainsana();
     }
+    
+    /////////////////----------------
+    
 
-       
+    /**
+     * luo uuden kirjan, antaa sen attribuuteille arvot ja lis‰‰ kirjan stringgridiin   
+     */
     private void uusiKirja() {
         Kirja uusi = new Kirja();
         uusi.rekisteroi();
@@ -155,30 +188,16 @@ public class KirjaGUIController {
             return;
         }
         
-        tableKirjat.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString());      
+        tableKirjat.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), uusi.getKieli(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString());      
     }
    
-    
-    protected void hae(int knro) {
-
-        int index = 0;
-        for (int i = 0; i < kirjalista.getKirjoja(); i++) {
-            Kirja kirja = kirjalista.annaKirja(i);
-            if (kirja.getTunnusNro() == knro) index = i;
-            tableKirjat.add(kirja.getNimi());
-        }
-    }
 
     public void initialize(URL url, ResourceBundle bundle) {
     	alusta();
     }
 
-
-// ------------------------- omia    
-    
-    
     /**
-     * 
+     * asettaa kirjalistan
      * @param kirjalista
      */
     public void setKirjalista(Kirjalista kirjalista) {
@@ -189,9 +208,11 @@ public class KirjaGUIController {
 
     }
 
+    /**
+     * n‰ytt‰‰ tableKirjat-stringgridist‰ valitun kirjan avainsanat listchooserissa
+     */
     private void naytaAvainsana() {	
     	listAvainsanat.clear();
-    	System.out.println("avainsanat tulostettu");
         Kirja uusi = tableKirjat.getObject();
 		List<Avainsana> avsanat = kirjalista.annaAvainsanat(uusi.getTunnusNro());
         for (Avainsana avs:avsanat) {
@@ -200,7 +221,9 @@ public class KirjaGUIController {
 
 	}
 
-    
+    /**
+     * lis‰‰ stringgridist‰ valitulle kirjalle avainsanan
+     */
     public void uusiAvainsana() { 
        	Avainsana avs = new Avainsana();
         Kirja uusi = tableKirjat.getObject();

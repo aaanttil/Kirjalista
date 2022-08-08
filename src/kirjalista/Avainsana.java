@@ -2,6 +2,8 @@ package kirjalista;
 
 import java.io.*;
 import java.util.Random;
+import fi.jyu.mit.ohj2.Mjonot;
+
 
 public class Avainsana {
     private int tunnusNro;
@@ -61,6 +63,30 @@ public class Avainsana {
         return tunnusNro;
     }
 
+    /**
+     * Asettaa tunnusnumeron ja samalla varmistaa että
+     * seuraava numero on aina suurempi kuin tähän mennessä suurin.
+     * @param nr asetettava tunnusnumero
+     */
+    private void setTunnusNro(int nr) {
+        tunnusNro = nr;
+        if ( tunnusNro >= seuraavaNro ) seuraavaNro = tunnusNro + 1;
+    }
+
+
+    @Override
+    public String toString() {
+        return "" + getTunnusNro() + "|" + kirjaNro + "|" + avainsana;
+    }
+
+    public void parse(String rivi) {
+        StringBuffer sb = new StringBuffer(rivi);
+        setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
+        kirjaNro = Mjonot.erota(sb, '|', kirjaNro);
+        avainsana = Mjonot.erota(sb, '|', avainsana);
+    }
+
+    
     
     /**
      * Palautetaan mille kirjalle avainsana kuuluu

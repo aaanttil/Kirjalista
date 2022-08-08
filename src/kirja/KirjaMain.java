@@ -1,10 +1,9 @@
 package kirja;
 
-import fi.jyu.mit.fxgui.StringGrid;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import kirjalista.Kirja;
 import kirjalista.Kirjalista;
+import kirjalista.SailoException;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +31,12 @@ public class KirjaMain extends Application {
             kirjaCtrl.setKirjalista(kirjalista);
             
             primaryStage.setOnCloseRequest((event) -> {
-            	if (kirjaCtrl.voikoSulkea() ) event.consume();
+            	try {
+					if (kirjaCtrl.voikoSulkea() ) event.consume();
+				} catch (SailoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             });
             
 

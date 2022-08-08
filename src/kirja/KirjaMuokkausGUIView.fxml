@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.jyu.mit.fxgui.ModalController">
+<BorderPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kirja.KirjaMuokkausGUIController">
    <top>
       <BorderPane prefHeight="678.0" prefWidth="513.0" BorderPane.alignment="CENTER">
          <center>
@@ -116,6 +116,7 @@
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </TextField>
+                  <Button mnemonicParsing="false" onAction="#handleApply" prefHeight="25.0" prefWidth="112.0" text="Apply" GridPane.rowIndex="11" />
                </children>
             </GridPane>
          </center>

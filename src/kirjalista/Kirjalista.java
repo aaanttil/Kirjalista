@@ -1,12 +1,14 @@
 package kirjalista;
 
+import java.io.File;
 import java.util.List;
 
 
 public class Kirjalista {
 	
-    private final Kirjat kirjat = new Kirjat();
-    private final Avainsanat avainsanat = new Avainsanat(); 
+    private Kirjat kirjat = new Kirjat();
+    private Avainsanat avainsanat = new Avainsanat(); 
+    private String hakemisto = "kirjat";
 
     /**
      * 
@@ -15,6 +17,27 @@ public class Kirjalista {
     public int getKirjoja() {
         return kirjat.getLkm();
     }
+    
+    public void setTiedosto(String nimi) {
+        File dir = new File(nimi);
+        dir.mkdirs();
+        String hakemistonNimi = "";
+        if ( !nimi.isEmpty() ) hakemistonNimi = nimi +"/";
+        kirjat.setTiedostonPerusNimi(hakemistonNimi + "kirjat");
+        avainsanat.setTiedostonPerusNimi(hakemistonNimi + "avainsanat");
+    }
+    
+
+    
+    public void lueTiedostosta() throws SailoException {
+        kirjat = new Kirjat(); // jos luetaan olemassa olevaan niin helpoin tyhjent‰‰ n‰in
+        avainsanat = new Avainsanat();
+
+        kirjat.lueTiedostosta();
+        avainsanat.lueTiedostosta();
+    }
+    
+    
     
     /**
      * 
@@ -52,23 +75,24 @@ public class Kirjalista {
         return kirjat.anna(i);
     }
     
-    /**
-     * 
-     * @param nimi
-     * @throws SailoException
-     */
-    public void lueTiedostosta(String nimi) throws SailoException {
-        kirjat.lueTiedostosta(nimi);
+
+    public void tallenna() throws SailoException {
+        String virhe = "";
+        try {
+            kirjat.tallenna();
+        } catch ( SailoException ex ) {
+            virhe = ex.getMessage();
+        }
+
+        try {
+            avainsanat.tallenna();
+        } catch ( SailoException ex ) {
+            virhe += ex.getMessage();
+        }
+        if ( !"".equals(virhe) ) throw new SailoException(virhe);
     }
 
-    /**
-     * 
-     * @throws SailoException
-     */
-    public void talleta() throws SailoException {
-        kirjat.talleta();
-        // TODO: yrit‰ tallettaa toinen vaikka toinen ep‰onnistuisi
-    }
+    
     
     /**
      * 	
@@ -86,6 +110,40 @@ public class Kirjalista {
      */
     public static void main(String[] args) throws SailoException {
     	Kirjalista lista = new Kirjalista();
+    	
+        try {
+            lista.lueTiedostosta();
+        } catch (SailoException ex) {
+            System.out.println(ex.getMessage());
+        }
+        try {
+            Kirja b1 = new Kirja(), b2 = new Kirja();
+            b1.rekisteroi();
+            b1.vastaaValtio();
+            b2.rekisteroi();
+            b2.vastaaValtio();
+
+            lista.lisaa(b1);
+            lista.lisaa(b2);
+
+        } catch (SailoException ex) {
+            System.out.println(ex.getMessage());
+        }
+        try {
+            System.out.println("============= Kerhon testi =================");
+
+            for (int i = 0; i < lista.getKirjoja(); i++) {
+                Kirja kirja = lista.annaKirja(i);
+                System.out.println("Kirja paikassa: " + i);
+                kirja.tulosta(System.out);
+            }
+            
+            lista.tallenna();
+
+        } catch (SailoException ex) {
+            System.out.println(ex.getMessage());
+        }
+
     	
     	Kirja kirja1 = new Kirja();
     	Kirja kirja2 = new Kirja();

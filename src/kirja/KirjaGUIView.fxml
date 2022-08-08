@@ -30,6 +30,7 @@
                 <Menu mnemonicParsing="false" text="Tiedosto">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleLueTiedosto" text="Lue tiedosto" />
                         <MenuItem mnemonicParsing="false" onAction="#handleLopeta" text="Lopeta" />
                   </items>
                 </Menu>
@@ -81,7 +82,7 @@
                   </Tab>
               </tabs>
             </TabPane>
-            <StringGrid fx:id="tableKirjat" editable="true" onMouseClicked="#handleNaytaavainsanat" prefHeight="657.0" prefWidth="819.0" rivit="Kirja|Kirjailija|Vuosi|Tila|Sivumäärä|Arvosana|Aloitus pvm|Lopetus pvm|&#10;">
+            <StringGrid fx:id="tableKirjat" editable="true" onMouseClicked="#handleNaytaavainsanat" prefHeight="657.0" prefWidth="819.0" rivit="Kirja|Kirjailija|Vuosi|Tila|Kieli|Sivumäärä|Arvosana|Aloitus pvm|Lopetus pvm|&#10;">
                <VBox.margin>
                   <Insets />
                </VBox.margin></StringGrid>
