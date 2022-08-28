@@ -73,12 +73,18 @@ public class Avainsana {
         if ( tunnusNro >= seuraavaNro ) seuraavaNro = tunnusNro + 1;
     }
 
-
+    /**
+     * Muuttaa avainsanan tiedot merkkijonoksi tiedostoon tallentamista varten
+     */
     @Override
     public String toString() {
-        return "" + getTunnusNro() + "|" + kirjaNro + "|" + avainsana;
+        return "" + getTunnusNro() + "|" + getKirjaNro() + "|" + avainsana;
     }
 
+    /**
+     * Erottaa merkkijonon avainsanan attribuuteiksi
+     * @param rivi
+     */
     public void parse(String rivi) {
         StringBuffer sb = new StringBuffer(rivi);
         setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
@@ -122,9 +128,20 @@ public class Avainsana {
      * @param nro viite kirjaan, johon avainsana liitet‰‰n
      */
     public void vastaaJotain(int nro) {
-        tunnusNro = nro;
+        kirjaNro = nro;
         Random r = new Random();
         String[] avsanoja = new String[]{"Ven‰j‰","Rikollisuus", "Murha", "Komedia","Fantasia","Dekkari","Tragedia"};
         avainsana = avsanoja[r.nextInt(6)];
+    }
+    
+    
+    /**
+     * Kiinnitt‰‰ kirjaan avainsanan
+     * @param nro
+     * @param avsana
+     */
+    public void uusiAvainsana(int nro, String avsana) {
+        kirjaNro = nro;
+        avainsana = avsana;
     }
 }

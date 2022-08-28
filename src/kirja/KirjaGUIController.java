@@ -12,6 +12,7 @@ import java.util.List;
 
 import kirjalista.Kirja;
 import kirjalista.Kirjalista;
+import kirjalista.Kirjat;
 import kirjalista.Avainsana;
 import kirjalista.SailoException;
 import fi.jyu.mit.fxgui.ListChooser;
@@ -40,14 +41,11 @@ import javafx.stage.Stage;
 public class KirjaGUIController {
    
 	
-	private Kirjalista kirjalista;
+	private static Kirjalista kirjalista;
 
 	@FXML private TextField hakuehto;
 	@FXML private ComboBoxChooser<String> cbKentat;
-	@FXML private Label labelVirhe;
 	@FXML private ListChooser<Kirja> chooserKirjat;
-
-    @FXML private StringGrid<Kirja> tableKirjat;
     
     @FXML private ListChooser<Avainsana> listAvainsanat;
     
@@ -62,14 +60,94 @@ public class KirjaGUIController {
 	@FXML private TableColumn<Kirja, Integer> sivumaara;
 
 	
+    @FXML
+    private Tab tabKaikki;
+    @FXML
+    private Tab tabKesken;
+    @FXML
+    private Tab tabKeskenjat;
+    @FXML
+    private Tab tabHaluanlukea;
+    @FXML
+    private Tab tabLuetut;
+    @FXML
+    private StringGrid<Kirja> tableHaluanlukea;
+    @FXML
+    private StringGrid<Kirja> tableKaikki;
+    @FXML
+    private StringGrid<Kirja> tableKesken;
+    @FXML
+    private StringGrid<Kirja> tableKeskenjat;
+    @FXML
+    private StringGrid<Kirja> tableLuetut;
+	
+	
+	
+    private Kirja kirjaKohdalla;
+
+	
 	@FXML private void handleHakuehto() {
-		String hakukentta = cbKentat.getSelectedText();
-		String ehto = hakuehto.getText();
-		if ( ehto.isEmpty() )
-			naytaVirhe(null);
-		else
-			naytaVirhe("Ei osata vielä hakea " + hakukentta + ": " + ehto);
+        hae(0); 
 	}
+	
+	
+    protected void hae(int jnr) {
+    	
+    	Kirja haettava = new Kirja();
+    	
+        int jnro = jnr; // jnro jäsenen numero, joka aktivoidaan haun jälkeen 
+        if ( jnro <= 0 ) { 
+            Kirja kohdalla = kirjaKohdalla; 
+            if ( kohdalla != null ) jnro = kohdalla.getTunnusNro(); 
+        }
+        
+        String ehto = hakuehto.getText(); 
+        System.out.println(ehto);
+        tableKaikki.clear();
+        
+        if (cbKentat.getSelectionModel().getSelectedIndex() == 0) {
+        	for (int i = 0; i < kirjalista.getKirjoja(); i++) {
+        		haettava = kirjalista.annaKirja(i);
+        		if (haettava.getNimi().toLowerCase().contains(ehto)) {
+        			tableKaikki.add(haettava, haettava.getNimi(), haettava.getKirjailija(), Integer.toString(haettava.getVuosi()), haettava.getTila(), haettava.getKieli(), Integer.toString(haettava.getSivut()), Integer.toString(haettava.getArvosana()), haettava.getAloitusPvm().toString(), haettava.getLopetusPvm().toString()); 
+        		}
+        	}
+        }
+        if (cbKentat.getSelectionModel().getSelectedIndex() == 1) {
+        	for (int i = 0; i < kirjalista.getKirjoja(); i++) {
+        		haettava = kirjalista.annaKirja(i);
+        		if (haettava.getKirjailija().toLowerCase().contains(ehto)) {
+        			tableKaikki.add(haettava, haettava.getNimi(), haettava.getKirjailija(), Integer.toString(haettava.getVuosi()), haettava.getTila(), haettava.getKieli(), Integer.toString(haettava.getSivut()), Integer.toString(haettava.getArvosana()), haettava.getAloitusPvm().toString(), haettava.getLopetusPvm().toString()); 
+        		} else System.out.println(haettava.getNimi());
+        	}
+        }
+
+       
+        if (cbKentat.getSelectionModel().getSelectedIndex() == 2) {
+        	for (int i = 0; i < kirjalista.getKirjoja(); i++) {
+        		haettava = kirjalista.annaKirja(i);
+        		if (String.valueOf(haettava.getVuosi()).contains(ehto)) {
+        			tableKaikki.add(haettava, haettava.getNimi(), haettava.getKirjailija(), Integer.toString(haettava.getVuosi()), haettava.getTila(), haettava.getKieli(), Integer.toString(haettava.getSivut()), Integer.toString(haettava.getArvosana()), haettava.getAloitusPvm().toString(), haettava.getLopetusPvm().toString()); 
+        		}
+        	}
+        }
+        
+        if (cbKentat.getSelectionModel().getSelectedIndex() == 3) {
+        	for (int i = 0; i < kirjalista.getKirjoja(); i++) {
+        		haettava = kirjalista.annaKirja(i);
+        		List<Avainsana> avsanat = kirjalista.annaAvainsanat(haettava.getTunnusNro());
+        		for (Avainsana avs:avsanat) {
+        			if (avs.getAvainsana().toLowerCase().contains(ehto)) {
+        				tableKaikki.add(haettava, haettava.getNimi(), haettava.getKirjailija(), Integer.toString(haettava.getVuosi()), haettava.getTila(), haettava.getKieli(), Integer.toString(haettava.getSivut()), Integer.toString(haettava.getArvosana()), haettava.getAloitusPvm().toString(), haettava.getLopetusPvm().toString());
+        				break;
+        			}
+        		}
+        	}
+        }
+        
+    }
+
+
 	
    
 	@FXML private void handleTallenna() {
@@ -88,21 +166,49 @@ public class KirjaGUIController {
 	
 	
 	@FXML private void handleMuokkaaKirja() {
-			ModalController.showModal(KirjaGUIController.class.getResource("KirjaMuokkausGUIView.fxml"), "Kirja", null, "");
+			kirjaKohdalla = tableKaikki.getObject();
+			try {
+				Kirja kirja;
+				kirja = KirjaMuokkausGUIController.kysyKirja(null, kirjaKohdalla.clone());
+				if (kirja == null) return;
+				kirjalista.korvaaTaiLisaa(kirja);
+				hae(0);
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			} catch (SailoException e) {
+				 Dialogs.showMessageDialog(e.getMessage()); 
+			}
 	}
 	
 
 	@FXML private void handleLisaaKirja() {
-        ModalController.showModal(KirjaGUIController.class.getResource("KirjaMuokkausGUIView.fxml"), "Kirja", null, "");
+        lisaaKirja();
 	}
 	
 	@FXML private void handlePoistaKirja() {
-        Dialogs.showMessageDialog("Ei osata vielä poistaa kirjaa");
+		Kirja poistettava = tableKaikki.getObject();
+		poistaKirja(poistettava);
 	}
 	                   
 	@FXML private void handleLisaaAvainsana() {
 		uusiAvainsana();
 	}
+	
+    protected void lisaaKirja() {
+        try {
+            Kirja uusi = new Kirja();
+            uusi = KirjaMuokkausGUIController.kysyKirja(null, uusi); 
+            if ( uusi == null ) return; 
+            uusi.rekisteroi(); 
+            kirjalista.lisaa(uusi);
+            hae(0);
+            
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
+            return;
+        }
+    }
+	
 	
 	
 	private String tallenna() {
@@ -116,14 +222,23 @@ public class KirjaGUIController {
 	}
 	
 	private String lueTiedosto() {
+		
 		try {
+			tableKaikki.clear();
+			tableLuetut.clear();
+			tableKesken.clear();
+			tableKeskenjat.clear();
+			tableHaluanlukea.clear();
 			kirjalista.lueTiedostosta();
 			Kirja uusi = new Kirja();
 			System.out.println("ok");
 			for(int i = 0; i < kirjalista.getKirjoja(); i++) {
 				uusi = kirjalista.annaKirja(i);
-		        tableKirjat.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), uusi.getKieli(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString());      
-			}		
+		        tableKaikki.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), uusi.getKieli(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString()); 
+		        String tila = uusi.getTila();
+		        muutTabit(uusi, tila);
+		        System.out.println(i);
+			}
 			return null;
 		} catch (SailoException e) {
             String virhe = e.getMessage(); 
@@ -133,18 +248,23 @@ public class KirjaGUIController {
 		
 	}
 	
+	
+	private void muutTabit(Kirja uusi, String tila) {
+        if (tila.equals("Luettu")) {
+        	tableLuetut.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), uusi.getKieli(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString());      
+        }
+        if (tila.equals("Kesken")) {
+        	tableKesken.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), uusi.getKieli(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString());      
+        }
+        if (tila.equals("Haluan lukea")) {
+        	tableHaluanlukea.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), uusi.getKieli(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString());      
+        }
+        if (tila.equals("Keskeytetty")) {
+        	tableKeskenjat.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), uusi.getKieli(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString());      
+        }
+	}
 
-	private void naytaVirhe(String virhe) {	        
-	    if ( virhe == null || virhe.isEmpty() ) {
-	         labelVirhe.setText("");
-	         labelVirhe.getStyleClass().removeAll("virhe");
-	         return;
-	    }
-	          labelVirhe.setText(virhe);
-	          labelVirhe.getStyleClass().add("virhe");
-    }
-		       
-	 
+		        
 	@FXML private void handleTietoja() {
 	   ModalController.showModal(KirjaGUIController.class.getResource("aboutView.fxml"), "Kirja", null, "");
 	}
@@ -188,9 +308,26 @@ public class KirjaGUIController {
             return;
         }
         
-        tableKirjat.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), uusi.getKieli(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString());      
+        tableKaikki.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), uusi.getKieli(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString());      
+        muutTabit(uusi, uusi.getTila());
     }
    
+    public void poistaKirja(Kirja poistettava) {
+    	if (poistettava == null) return;
+    	kirjalista.poista(poistettava);
+    	tableKaikki.clear();
+		tableLuetut.clear();
+		tableKesken.clear();
+		tableKeskenjat.clear();
+		tableHaluanlukea.clear();
+    	Kirja kirja = new Kirja();
+    	for(int i = 0; i < kirjalista.getKirjoja(); i++) {
+    		kirja = kirjalista.annaKirja(i);
+    		tableKaikki.add(kirja, kirja.getNimi(), kirja.getKirjailija(), Integer.toString(kirja.getVuosi()), kirja.getTila(), kirja.getKieli(), Integer.toString(kirja.getSivut()), Integer.toString(kirja.getArvosana()), kirja.getAloitusPvm().toString(), kirja.getLopetusPvm().toString());
+    		muutTabit(kirja, kirja.getTila());
+    	}
+    }
+    
 
     public void initialize(URL url, ResourceBundle bundle) {
     	alusta();
@@ -204,8 +341,14 @@ public class KirjaGUIController {
     	this.kirjalista = kirjalista;
     }
     
+    
     protected void alusta() {
-
+    	cbKentat.clear(); 
+    	cbKentat.add("Kirjan nimi");
+    	cbKentat.add("Kirjailija");
+    	cbKentat.add("Vuosi");
+    	cbKentat.add("Avainsana");
+        cbKentat.getSelectionModel().select(1); 
     }
 
     /**
@@ -213,12 +356,14 @@ public class KirjaGUIController {
      */
     private void naytaAvainsana() {	
     	listAvainsanat.clear();
-        Kirja uusi = tableKirjat.getObject();
+        try {
+    	Kirja uusi = tableKaikki.getObject();
 		List<Avainsana> avsanat = kirjalista.annaAvainsanat(uusi.getTunnusNro());
         for (Avainsana avs:avsanat) {
         	listAvainsanat.add(avs.getAvainsana(), avs);
         }
-
+        } catch (Exception e) {
+        }
 	}
 
     /**
@@ -226,14 +371,30 @@ public class KirjaGUIController {
      */
     public void uusiAvainsana() { 
        	Avainsana avs = new Avainsana();
-        Kirja uusi = tableKirjat.getObject();
+        Kirja uusi = tableKaikki.getObject();
     	avs.rekisteroi();     
     	int tunnus = uusi.getTunnusNro();
     	System.out.println(tunnus);
     	avs.vastaaJotain(tunnus);
     	kirjalista.lisaa(avs);
         naytaAvainsana();
-    } 
+    }
+
+
+	public boolean avaa() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	public void lueTiedosto(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public static Kirjalista getKirjalista() {
+		return kirjalista;
+	}
 }
 
 

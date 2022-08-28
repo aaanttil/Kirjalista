@@ -37,15 +37,20 @@ public class Kirjalista {
         avainsanat.lueTiedostosta();
     }
     
-    
+    public void korvaaTaiLisaa(Kirja kirja) throws SailoException { 
+        kirjat.korvaaTaiLisaa(kirja); 
+    } 
+
     
     /**
      * 
      * @param nro
      * @return
      */
-    public int poista(@SuppressWarnings("unused") int nro) {
-        return 0;
+    public int poista(Kirja kirja) {
+        if (kirja == null ) return 0;
+        int ret = kirjat.poista(kirja.getTunnusNro()); 
+        return ret; 
     }
 
     /**

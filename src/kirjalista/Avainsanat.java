@@ -24,11 +24,11 @@ public class Avainsanat implements Iterable<Avainsana>{
 
 
 
-
     public Avainsanat() {
-        // toistaiseksi ei tarvitse tehd‰ mit‰‰n
+    	
     }
 
+    
     /**
      * lis‰‰ avainsanan listaan avainsanoista
      * @param avs
@@ -38,15 +38,11 @@ public class Avainsanat implements Iterable<Avainsana>{
     }
 
     
-
-   
-    
     /**
-     * 
+     * lukee avainsanat tiedostosta 
      * @param hakemisto
      * @throws SailoException
      */
-
     public void lueTiedostosta(String tied) throws SailoException {
         setTiedostonPerusNimi(tied);
         try ( BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi())) ) {
@@ -72,7 +68,10 @@ public class Avainsanat implements Iterable<Avainsana>{
         lueTiedostosta(getTiedostonPerusNimi());
     }
         
-
+    /**
+     * tallentaa avainsanat tiedostoon
+     * @throws SailoException
+     */
     public void tallenna() throws SailoException {
 
         File ftied = new File(getTiedostonNimi());
@@ -110,10 +109,10 @@ public class Avainsanat implements Iterable<Avainsana>{
      * @param tunnusnro
      * @return kirjaan liitetyt avainsanat
      */
-    public List<Avainsana> annaAvainsanat(int tunnusnro) {
+    public List<Avainsana> annaAvainsanat(int kirjanro) {
         List<Avainsana> loydetyt = new ArrayList<Avainsana>();
         for (Avainsana avs : alkiot)
-            if (avs.getTunnusNro() == tunnusnro) loydetyt.add(avs);
+            if (avs.getKirjaNro() == kirjanro) loydetyt.add(avs);
         return loydetyt;
     }
 
@@ -157,6 +156,7 @@ public class Avainsanat implements Iterable<Avainsana>{
         }
 
         }
+
 
 	public void setTiedostonPerusNimi(String tied) {
         tiedostonPerusNimi = tied;

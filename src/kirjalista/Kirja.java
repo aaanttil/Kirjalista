@@ -15,21 +15,27 @@ import fi.jyu.mit.ohj2.Mjonot;
  */
 
 
-public class Kirja {
+public class Kirja implements Cloneable {
 	private int tunnusNro;    
 	/// private int kirjaNro;
 	private String kirjanimi = "";
 	private String kirjailija = "";
-	private int vuosi;
+	private int vuosi = 0;
 	private String kieli = "";
-	private int sivumaara;
+	private int sivumaara = 0;
     private static int seuraavaNro = 1;
-    private String tila; ;
-    private int arvosana;
-    final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
+    private String tila = "kesken";
+    private int arvosana = 0;
     private LocalDate aloitusPvm = LocalDate.now();
     private LocalDate lopetusPvm = LocalDate.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    
+    public Kirja clone() throws CloneNotSupportedException {
+    	Kirja uusi;
+    	uusi = (Kirja) super.clone();
+    	return uusi;
+    }
     
     /**
      * Oletus muodostaja
@@ -68,8 +74,8 @@ public class Kirja {
         kieli = Mjonot.erota(sb, '|', kieli);
         sivumaara = Mjonot.erota(sb, '|', sivumaara);
         arvosana = Mjonot.erota(sb, '|', arvosana);
-        ///aloitusPvm = LocalDate.parse(Mjonot.erota(sb, '|', "2000-01-01"), dtf);
-        ///lopetusPvm = LocalDate.parse(Mjonot.erota(sb, '|', "2000-01-01"), dtf);
+        aloitusPvm = LocalDate.parse(Mjonot.erota(sb, '|'));
+        lopetusPvm = LocalDate.parse(Mjonot.erota(sb, '|'));
     }
 
     
@@ -205,8 +211,8 @@ public class Kirja {
 	public String tilaSanaksi(int tila) {
     	if(tila == 0) return "Luettu";
     	if(tila == 1) return "Kesken";
-    	if(tila == 2) return "Aion lukea";
-    	if(tila == 3) return "Lukeminen lopetettu";
+    	if(tila == 2) return "Haluan lukea";
+    	if(tila == 3) return "Keskeytetty";
     	else return "Ei mitään";
     }   
     
@@ -273,8 +279,57 @@ public class Kirja {
         book2.tulosta(System.out);
     }
 
+	
+    public String aseta(int k, String jono) {
+        if (jono == null) return "";
+    	String tjono = jono.trim();
+        StringBuffer sb = new StringBuffer(tjono);
+        switch ( k ) {
+        case 0:
+            setTunnusNro(Mjonot.erota(sb, '§', getTunnusNro()));
+            return null;
+        case 1:
+            kirjanimi = tjono;
+            return null;
+        case 2:
+        	kirjailija = tjono;
+            return null;
+        case 3:
+            arvosana = Integer.parseInt(tjono);
+            return null;
+        case 4:
+        	try {
+            aloitusPvm = LocalDate.parse(tjono, formatter);
+            } catch (Exception e) {
+            }
+            return null;
+        case 5:
+        	try {
+            lopetusPvm = LocalDate.parse(tjono, formatter);
+        	} catch (Exception e) {
+        	}
+            return null;
+        case 6:
+            vuosi = Integer.parseInt(tjono);
+            return null;
+        case 7:
+            tila = tjono;
+            return null;
+        case 8:
+            kieli = tjono;
+            return null;
+        case 9:
+            sivumaara = Integer.parseInt(tjono);
+            return null;
+        case 10:
+            return null;
+        default:
+            return "ÄÄliö";
+        }
+    }
 
 
-    
+	
+	
 
 }

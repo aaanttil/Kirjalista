@@ -48,8 +48,27 @@ public class Kirjat implements Iterable<Kirja>{
         if (lkm >= alkiot.length) alkiot = Arrays.copyOf(alkiot, lkm+20);
         alkiot[lkm] = kirja;
         lkm++;
+        muutettu = true;
     }
     
+    public int poista(int id) {
+    	int ind = etsiId(id);
+    	if (ind < 0) return 0;
+    	lkm--;
+    	for (int i = ind; i < lkm; i++) {
+    		alkiot[i] = alkiot[i + 1];
+    	}
+    	alkiot[lkm] = null;
+    	muutettu = true;
+    	return 1;
+    }
+    
+    public int etsiId(int id) { 
+    	for (int i = 0; i < lkm; i++) {
+    		if (id == alkiot[i].getTunnusNro()) return i; 
+    	}
+    	return -1;    
+    } 
     
     public void lueTiedostosta(String tied) throws SailoException {
         setTiedostonPerusNimi(tied);
@@ -75,6 +94,19 @@ public class Kirjat implements Iterable<Kirja>{
         lueTiedostosta(getTiedostonPerusNimi());
     }
 
+    public void korvaaTaiLisaa(Kirja kirja) throws SailoException {
+        int id = kirja.getTunnusNro();
+        for (int i = 0; i < lkm; i++) {
+            if ( alkiot[i].getTunnusNro() == id ) {
+                alkiot[i] = kirja;
+                muutettu = true;
+                return;
+            }
+        }
+        lisaa(kirja);
+    }
+
+    
     
     /**
      * 
@@ -88,10 +120,17 @@ public class Kirjat implements Iterable<Kirja>{
         return alkiot[i];
     }    
     
+    public String getBakNimi() {
+        return tiedostonPerusNimi + ".bak";
+    }
 
     public void tallenna() throws SailoException {
-    	
+    	if (!muutettu) return;      
+    	File bkup = new File(getBakNimi());
         File ftied = new File(getTiedostonNimi());
+        bkup.delete();
+        ftied.renameTo(bkup);
+        
         
         try ( PrintWriter fo = new PrintWriter(new FileWriter(ftied.getCanonicalPath())) ) {
             fo.println(alkiot.length);
