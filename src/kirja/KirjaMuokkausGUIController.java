@@ -73,7 +73,13 @@ public class KirjaMuokkausGUIController implements ModalControllerInterface<Kirj
 		naytaKirja(edits, kirjaKohdalla, avainsanat);
 		
 	}
-	
+
+	/**
+	 * näyttää kirjan tiedot textfieldeissä 
+	 * @param edits taulukko textfieldeistä
+	 * @param kirja kirja jonka tiedot näytetään
+	 * @param avainsanat kirjan avainsanat
+	 */
     public static void naytaKirja(TextField[] edits, Kirja kirja, TextArea avainsanat) {
         if (kirja == null) return;
         edits[0].setText(kirja.getNimi());
@@ -97,7 +103,9 @@ public class KirjaMuokkausGUIController implements ModalControllerInterface<Kirj
 		alusta();  
 	}
 	
-	
+	/**
+	 * alustaa tekstikentät
+	 */
     protected void alusta() {
         edits = new TextField[]{kirjaNimi, kirjailijaNimi, arvosana, aloitusPvm, lopetusPvm, vuosi, tila, kieli, sivujaLuettu};
         int i = 0;
@@ -108,6 +116,9 @@ public class KirjaMuokkausGUIController implements ModalControllerInterface<Kirj
 
     }
 	
+    /**
+     * lisää kirjalle textareaan kirjoitetut avainsanat 
+     */
     private void kasitteleAvainsanat() {
 		String s = avainsanat.getText();
 		List<String> avsanaLista = Arrays.asList(s.split(","));
@@ -128,6 +139,12 @@ public class KirjaMuokkausGUIController implements ModalControllerInterface<Kirj
 	        }
 		}
 
+    /**
+     * uodaan kirjan kysymisdialogi ja palautetaan kirja muutettuna tai null
+     * @param modalityStage mille ollaan modaalisia
+     * @param oletus mitä dataa näytetään oletuksena
+     * @return null jos painetaan cancel, muuten muutettu kirja
+     */
 	public static Kirja kysyKirja(Stage modalityStage, Kirja oletus) {
         return ModalController.<Kirja, KirjaMuokkausGUIController>showModal(
         		KirjaMuokkausGUIController.class.getResource("KirjaMuokkausGUIView.fxml"),
@@ -136,7 +153,11 @@ public class KirjaMuokkausGUIController implements ModalControllerInterface<Kirj
                 );
     }
 
-    
+    /**
+     * tekee muutokset kirjaan teksikenttien muutosten perusteella
+     * @param k
+     * @param edit
+     */
     private void kasitteleMuutosKirjaan(int k, TextField edit) {
     	String s = edit.getText();
     	kirjaKohdalla.aseta(k, s);

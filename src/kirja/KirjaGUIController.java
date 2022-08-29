@@ -90,7 +90,10 @@ public class KirjaGUIController {
         hae(0); 
 	}
 	
-	
+	/**
+	 * hakee stringgridiin kirjat
+	 * @param jnr
+	 */
     protected void hae(int jnr) {
     	
     	Kirja haettava = new Kirja();
@@ -166,18 +169,7 @@ public class KirjaGUIController {
 	
 	
 	@FXML private void handleMuokkaaKirja() {
-			kirjaKohdalla = tableKaikki.getObject();
-			try {
-				Kirja kirja;
-				kirja = KirjaMuokkausGUIController.kysyKirja(null, kirjaKohdalla.clone());
-				if (kirja == null) return;
-				kirjalista.korvaaTaiLisaa(kirja);
-				hae(0);
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			} catch (SailoException e) {
-				 Dialogs.showMessageDialog(e.getMessage()); 
-			}
+		muokkaa();
 	}
 	
 
@@ -209,8 +201,28 @@ public class KirjaGUIController {
         }
     }
 	
+	/**
+	 * k‰sittelee kirjan muokkaamisen
+	 */
+	private void muokkaa() {
+		kirjaKohdalla = tableKaikki.getObject();
+		try {
+			Kirja kirja;
+			kirja = KirjaMuokkausGUIController.kysyKirja(null, kirjaKohdalla.clone());
+			if (kirja == null) return;
+			kirjalista.korvaaTaiLisaa(kirja);
+			hae(0);
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		} catch (SailoException e) {
+			 Dialogs.showMessageDialog(e.getMessage()); 
+		}
+	}
 	
-	
+	/**
+	 * tallentaa kirjalistan kirjat ja avainsanat 
+	 * @return
+	 */
 	private String tallenna() {
 		try {
 			kirjalista.tallenna();
@@ -221,8 +233,11 @@ public class KirjaGUIController {
 		}	
 	}
 	
+	/**
+	 * lukee kirjat ja avainsanat tiedostoista
+	 * @return null jos onnistuu, muuten virhe
+	 */
 	private String lueTiedosto() {
-		
 		try {
 			tableKaikki.clear();
 			tableLuetut.clear();
@@ -248,7 +263,11 @@ public class KirjaGUIController {
 		
 	}
 	
-	
+	/**
+	 * apuohjelma joka lis‰‰ kirjat muissa tabeiss‰ olevii stringgrideihin tilan perusteella
+	 * @param uusi lis‰tt‰v‰ kirja
+	 * @param tila attribuutti, jonka perusteella lis‰t‰‰n tabeissa oleviin stringgrideihin
+	 */
 	private void muutTabit(Kirja uusi, String tila) {
         if (tila.equals("Luettu")) {
         	tableLuetut.add(uusi, uusi.getNimi(), uusi.getKirjailija(), Integer.toString(uusi.getVuosi()), uusi.getTila(), uusi.getKieli(), Integer.toString(uusi.getSivut()), Integer.toString(uusi.getArvosana()), uusi.getAloitusPvm().toString(), uusi.getLopetusPvm().toString());      
@@ -312,6 +331,10 @@ public class KirjaGUIController {
         muutTabit(uusi, uusi.getTila());
     }
    
+    /**
+     * poistaa kirjan
+     * @param poistettava
+     */
     public void poistaKirja(Kirja poistettava) {
     	if (poistettava == null) return;
     	kirjalista.poista(poistettava);
@@ -343,12 +366,6 @@ public class KirjaGUIController {
     
     
     protected void alusta() {
-    	cbKentat.clear(); 
-    	cbKentat.add("Kirjan nimi");
-    	cbKentat.add("Kirjailija");
-    	cbKentat.add("Vuosi");
-    	cbKentat.add("Avainsana");
-        cbKentat.getSelectionModel().select(1); 
     }
 
     /**

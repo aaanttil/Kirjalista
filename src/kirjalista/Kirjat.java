@@ -70,6 +70,11 @@ public class Kirjat implements Iterable<Kirja>{
     	return -1;    
     } 
     
+    /**
+     * lukee kirjat tiedostosta
+     * @param tied
+     * @throws SailoException
+     */
     public void lueTiedostosta(String tied) throws SailoException {
         setTiedostonPerusNimi(tied);
         try ( BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi())) ) {
@@ -94,6 +99,11 @@ public class Kirjat implements Iterable<Kirja>{
         lueTiedostosta(getTiedostonPerusNimi());
     }
 
+    /**
+     * korvaa kirjan
+     * @param kirja korvattava kirja
+     * @throws SailoException
+     */
     public void korvaaTaiLisaa(Kirja kirja) throws SailoException {
         int id = kirja.getTunnusNro();
         for (int i = 0; i < lkm; i++) {
@@ -106,8 +116,6 @@ public class Kirjat implements Iterable<Kirja>{
         lisaa(kirja);
     }
 
-    
-    
     /**
      * 
      * @param i
@@ -120,10 +128,18 @@ public class Kirjat implements Iterable<Kirja>{
         return alkiot[i];
     }    
     
+    /**
+     * antaa backup tiedoston nimen
+     * @return backuptiedoston nimi
+     */
     public String getBakNimi() {
         return tiedostonPerusNimi + ".bak";
     }
 
+    /**
+     * tallentaa kirjojen tiedot tiedostoon
+     * @throws SailoException
+     */
     public void tallenna() throws SailoException {
     	if (!muutettu) return;      
     	File bkup = new File(getBakNimi());

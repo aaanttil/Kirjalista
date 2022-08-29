@@ -24,7 +24,7 @@ public class Kirja implements Cloneable {
 	private String kieli = "";
 	private int sivumaara = 0;
     private static int seuraavaNro = 1;
-    private String tila = "kesken";
+    private String tila = "Kesken";
     private int arvosana = 0;
     private LocalDate aloitusPvm = LocalDate.now();
     private LocalDate lopetusPvm = LocalDate.now();
@@ -43,11 +43,18 @@ public class Kirja implements Cloneable {
     public Kirja() {	
     }
     
+    /**
+     * asettaa kirjalle tunnusnumeron
+     * @param nr
+     */
     private void setTunnusNro(int nr) {
         tunnusNro = nr;
         if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
     }
 
+    /**
+     * muuttaa kirjan tiedot merkkijonoksi
+     */
     @Override
     public String toString() {
         return "" +
@@ -63,7 +70,10 @@ public class Kirja implements Cloneable {
                 lopetusPvm + "|"; 
     }
 
-
+    /**
+     * pilkkoo merkkijonon kirjan tiedoiksi
+     * @param rivi
+     */
     public void parse(String rivi) {
         var sb = new StringBuilder(rivi);
         setTunnusNro(Mjonot.erota(sb, '|', getTunnusNro()));
@@ -232,33 +242,7 @@ public class Kirja implements Cloneable {
         arvosana = r.nextInt(11);
         
     }
-    
-    public String getKysymys(int k ) {
-    	switch (k) {
-    		case 0:
-    			return "id";
-    		case 1:
-    			return "Kirja";
-    		case 2:
-    			return "Kirjailija";
-    		case 3:
-    			return "Vuosi";
-    		case 4:
-    			return "Tila";
-    		case 5:
-    			return "Sivumäärä";
-    		case 6:
-    			return "Arvosana";
-    		case 7:
-    			return "Aloitus pvm";
-    		case 8:
-    			return "Lopetus pvm";
-    		default:
-    			return "???";
-    	}
-    }
-    
-    
+   
     /**
      * Testiohjelma Kirjalle
      * @param args ei käytetä
@@ -279,7 +263,12 @@ public class Kirja implements Cloneable {
         book2.tulosta(System.out);
     }
 
-	
+	/**
+	 * asettaa k:n kentän arvoksi parametrina tuodun merkkijonon arvon
+	 * @param k kuinka monennen kentän arvo asetetaan
+	 * @param jono merkkijono joka asetetaan kentän arvoksi
+	 * @return nul
+	 */
     public String aseta(int k, String jono) {
         if (jono == null) return "";
     	String tjono = jono.trim();
@@ -324,12 +313,9 @@ public class Kirja implements Cloneable {
         case 10:
             return null;
         default:
-            return "ÄÄliö";
+            return "jaa";
         }
     }
 
-
-	
-	
 
 }

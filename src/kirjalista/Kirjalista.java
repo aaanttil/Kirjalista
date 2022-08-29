@@ -11,12 +11,13 @@ public class Kirjalista {
     private String hakemisto = "kirjat";
 
     /**
-     * 
+     * palauttaa kirjojen lukum‰‰r‰n
      * @return kirjojen lukum‰‰r‰
      */
     public int getKirjoja() {
         return kirjat.getLkm();
     }
+    
     
     public void setTiedosto(String nimi) {
         File dir = new File(nimi);
@@ -28,7 +29,10 @@ public class Kirjalista {
     }
     
 
-    
+    /**
+     * lukee kirjat ja avainsanat tiedostoista
+     * @throws SailoException
+     */
     public void lueTiedostosta() throws SailoException {
         kirjat = new Kirjat(); // jos luetaan olemassa olevaan niin helpoin tyhjent‰‰ n‰in
         avainsanat = new Avainsanat();
@@ -37,13 +41,18 @@ public class Kirjalista {
         avainsanat.lueTiedostosta();
     }
     
+    /**
+     * korvaa kirjan
+     * @param kirja korvatta kirja
+     * @throws SailoException
+     */
     public void korvaaTaiLisaa(Kirja kirja) throws SailoException { 
         kirjat.korvaaTaiLisaa(kirja); 
     } 
 
     
     /**
-     * 
+     * poistaa kirjan taulukosta
      * @param nro
      * @return
      */
@@ -80,7 +89,10 @@ public class Kirjalista {
         return kirjat.anna(i);
     }
     
-
+    /**
+     * tallentaa kirjat ja avainsanat tiedostoihin
+     * @throws SailoException
+     */
     public void tallenna() throws SailoException {
         String virhe = "";
         try {
