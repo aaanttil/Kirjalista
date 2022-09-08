@@ -23,7 +23,9 @@ public class Avainsanat implements Iterable<Avainsana>{
     private boolean muutettu = false;
 
 
-
+    /**
+     *oletusmuodostaja
+     */
     public Avainsanat() {
     	
     }
@@ -64,6 +66,10 @@ public class Avainsanat implements Iterable<Avainsana>{
         }
     }
 
+    /**
+     * lukee tiedostosta
+     * @throws SailoException
+     */
     public void lueTiedostosta() throws SailoException {
         lueTiedostosta(getTiedostonPerusNimi());
     }
@@ -88,6 +94,14 @@ public class Avainsanat implements Iterable<Avainsana>{
         muutettu = false;
     }
 
+    /**
+     * Poista avainsana listasta
+     */
+    public boolean poista(Avainsana avs) {
+    	boolean ret = alkiot.remove(avs);
+    	if (ret) muutettu = true;
+    	return ret;
+    }
     
     
     /**

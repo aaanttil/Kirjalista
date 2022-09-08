@@ -102,8 +102,7 @@ public class Avainsana {
 		return kirjaNro;
 	}
     
-    
-    
+   
     /**
      * Palautetaan avainsana merkkijonona
      * @return avainsana	

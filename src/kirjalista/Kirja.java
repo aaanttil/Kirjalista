@@ -20,15 +20,15 @@ public class Kirja implements Cloneable {
 	/// private int kirjaNro;
 	private String kirjanimi = "";
 	private String kirjailija = "";
-	private int vuosi = 0;
+	private int vuosi = -1;
 	private String kieli = "";
-	private int sivumaara = 0;
+	private int sivumaara = -1;
     private static int seuraavaNro = 1;
-    private String tila = "Kesken";
-    private int arvosana = 0;
+    private String tila = "";
+    private int arvosana = -1;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private LocalDate aloitusPvm = LocalDate.now();
     private LocalDate lopetusPvm = LocalDate.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     
     public Kirja clone() throws CloneNotSupportedException {
@@ -158,6 +158,11 @@ public class Kirja implements Cloneable {
     	return tunnusNro;
     }
     
+    /**
+     * Palauttaa kirjan tunnusnumeron
+     * @return kirjan tunnusnumero
+     */
+   
     /**
      * @return kirjan kieli
      * @example

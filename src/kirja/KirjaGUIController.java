@@ -82,7 +82,6 @@ public class KirjaGUIController {
     private StringGrid<Kirja> tableLuetut;
 	
 	
-	
     private Kirja kirjaKohdalla;
 
 	
@@ -135,7 +134,7 @@ public class KirjaGUIController {
         	}
         }
         
-        if (cbKentat.getSelectionModel().getSelectedIndex() == 3) {
+        if (cbKentat.getSelectionModel().getSelectedIndex() == 3) {	
         	for (int i = 0; i < kirjalista.getKirjoja(); i++) {
         		haettava = kirjalista.annaKirja(i);
         		List<Avainsana> avsanat = kirjalista.annaAvainsanat(haettava.getTunnusNro());
@@ -146,8 +145,7 @@ public class KirjaGUIController {
         			}
         		}
         	}
-        }
-        
+        }   
     }
 
 
@@ -155,6 +153,13 @@ public class KirjaGUIController {
    
 	@FXML private void handleTallenna() {
         tallenna();
+	}
+	
+	@FXML private void handlePoistaAVS() {
+		Avainsana avs = new Avainsana();
+		avs = listAvainsanat.getSelectedObject();
+        kirjalista.poista(avs);
+        naytaAvainsana();     
 	}
 	
 	@FXML private void handleLueTiedosto() {
@@ -176,6 +181,7 @@ public class KirjaGUIController {
 	@FXML private void handleLisaaKirja() {
         lisaaKirja();
 	}
+
 	
 	@FXML private void handlePoistaKirja() {
 		Kirja poistettava = tableKaikki.getObject();
@@ -186,6 +192,10 @@ public class KirjaGUIController {
 		uusiAvainsana();
 	}
 	
+
+	/**
+	 * avaa uuden muokkausikkunan, ja samalla luo uuden kirjaolion
+	 */
     protected void lisaaKirja() {
         try {
             Kirja uusi = new Kirja();

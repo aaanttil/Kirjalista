@@ -146,6 +146,8 @@
          <children>
             <ListChooser fx:id="listAvainsanat" layoutX="18.0" layoutY="126.0" />
             <Label alignment="CENTER" layoutX="18.0" layoutY="109.0" prefHeight="17.0" prefWidth="247.0" text="Avainsanat" />
+            <Pane layoutX="42.0" layoutY="526.0" prefHeight="34.0" prefWidth="200.0" />
+            <Button fx:id="poistaAVS" layoutX="57.0" layoutY="560.0" mnemonicParsing="false" onAction="#handlePoistaAVS" prefHeight="25.0" prefWidth="166.0" text="Poista avainsana" />
          </children>
       </Pane>
    </right>

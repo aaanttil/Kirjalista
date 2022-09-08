@@ -63,6 +63,15 @@ public class Kirjalista {
     }
 
     /**
+     * poistaa avainsanan listasta
+     * @param nro
+     * @return
+     */
+    public void poista(Avainsana avs) {
+        avainsanat.poista(avs);
+    }
+    
+    /**
      * lisää kirjan kirjat taulukkoon
      * @param kirja
      * @throws SailoException
@@ -116,8 +125,8 @@ public class Kirjalista {
      * @param tunnusNro viite kirjaan
      * @return palauttaa listan kirjaan liitetyistä avainsanoista
      */
-    public List<Avainsana> annaAvainsanat(int tunnusNro) {
-    	return avainsanat.annaAvainsanat(tunnusNro);
+    public List<Avainsana> annaAvainsanat(int kirjaNro) {
+    	return avainsanat.annaAvainsanat(kirjaNro);
 	}
     
     /**

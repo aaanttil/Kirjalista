@@ -2,6 +2,7 @@ package kirja;
 
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -45,11 +46,13 @@ public class KirjaMuokkausGUIController implements ModalControllerInterface<Kirj
     
     @FXML private void handleCancel() {
         kirjaKohdalla = null;
+    	ModalController.closeStage(vuosi);
     }
 
-    @FXML private Kirja handleOK() {
+    @FXML private void handleOK() {
     	kasitteleAvainsanat();
-    	return kirjaKohdalla;
+    	poistetutAvainsanat();
+    	ModalController.closeStage(vuosi);
     }
 
 	@Override
@@ -82,15 +85,24 @@ public class KirjaMuokkausGUIController implements ModalControllerInterface<Kirj
 	 */
     public static void naytaKirja(TextField[] edits, Kirja kirja, TextArea avainsanat) {
         if (kirja == null) return;
+        
         edits[0].setText(kirja.getNimi());
-        edits[1].setText(kirja.getKirjailija());        
-        edits[2].setText(Integer.toString(kirja.getArvosana()));
+        edits[1].setText(kirja.getKirjailija());
+        if (kirja.getArvosana() == -1 ) {
+            edits[2].setText("");
+        } else edits[2].setText(Integer.toString(kirja.getArvosana()));
         edits[3].setText(kirja.getAloitusPvm().toString());
-        edits[4].setText(kirja.getLopetusPvm().toString());
-        edits[5].setText(Integer.toString(kirja.getVuosi()));
+        if (kirja.getLopetusPvm() == null) {
+        	edits[4].setText("");
+        } else edits[4].setText(kirja.getLopetusPvm().toString());
+        if (kirja.getVuosi() == -1 ) {
+        	edits[5].setText("");
+        } else edits[5].setText(Integer.toString(kirja.getVuosi()));       
         edits[6].setText(kirja.getTila());
         edits[7].setText(kirja.getKieli());
-        edits[8].setText(Integer.toString(kirja.getSivut()));
+        if (kirja.getSivut() == -1 ) {
+        	edits[8].setText("");
+        } else edits[8].setText(Integer.toString(kirja.getSivut()));
 
         List<Avainsana> avsanat = kirjalista.annaAvainsanat(kirja.getTunnusNro());
         for (Avainsana avs:avsanat) {
@@ -139,6 +151,27 @@ public class KirjaMuokkausGUIController implements ModalControllerInterface<Kirj
 	        }
 		}
 
+    /**
+     * Poistaa avainsanat, jotka eivät ole avainsanat textareassa
+     */
+    private void poistetutAvainsanat() {
+		String s = avainsanat.getText();
+		List<String> avsanaLista = Arrays.asList(s.split(","));
+		List<Avainsana> avsanat = kirjalista.annaAvainsanat(kirjaKohdalla.getTunnusNro());
+		
+		for (Avainsana avs:avsanat) {
+			int k = 0;
+	        for (String ss : avsanaLista) {
+	        	if (avs.getAvainsana().equals(ss)) { 
+	        		k = 1;
+	        	}
+	        }	
+	        if (k == 0)  {
+	        	kirjalista.poista(avs);
+	        }
+    }
+    }
+    
     /**
      * uodaan kirjan kysymisdialogi ja palautetaan kirja muutettuna tai null
      * @param modalityStage mille ollaan modaalisia
