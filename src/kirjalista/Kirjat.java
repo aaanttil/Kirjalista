@@ -31,6 +31,10 @@ public class Kirjat implements Iterable<Kirja>{
         alkiot = new Kirja[MAX_KIRJOJA];
     }
     
+    /**
+     * Palautetaan iteraattori kirjoistaan.
+     * @return kirja iteraattori
+     */
     @Override
     public Iterator<Kirja> iterator() {
         return new KirjatIterator();
@@ -51,6 +55,11 @@ public class Kirjat implements Iterable<Kirja>{
         muutettu = true;
     }
     
+    /**
+     * poistaa kirjan, jolla parametrina annettu tunnusnumero
+     * @param id poistettavan kirjan tunnusnumero
+     * @return 1 jos poistettiiinn, 0 jos ei löydy
+     */
     public int poista(int id) {
     	int ind = etsiId(id);
     	if (ind < 0) return 0;
@@ -63,6 +72,11 @@ public class Kirjat implements Iterable<Kirja>{
     	return 1;
     }
     
+    /**
+     * etsii kirjan id:n
+     * @param id tunnusnumero, jonka mukaan etsitään
+     * @return
+     */
     public int etsiId(int id) { 
     	for (int i = 0; i < lkm; i++) {
     		if (id == alkiot[i].getTunnusNro()) return i; 
@@ -117,10 +131,10 @@ public class Kirjat implements Iterable<Kirja>{
     }
 
     /**
-     * 
-     * @param i
-     * @return
-     * @throws IndexOutOfBoundsException
+     * palauttaa viitteen i:teen kirjaan
+     * @param i monennenko kirjan viite halutaan
+     * @return viite kirjaan, jonka indeksi on i
+     * @throws IndexOutOfBoundsException jos i ei ole sallitulla alueella  
      */
     public Kirja anna(int i) throws IndexOutOfBoundsException {
         if (i < 0 || lkm <= i)
@@ -183,7 +197,11 @@ public class Kirjat implements Iterable<Kirja>{
     }
 
     
-    
+    /**
+     * luokka kirjojen iteroimiseksi
+     * 
+     *
+     */
     public class KirjatIterator implements Iterator<Kirja> {
         private int kohdalla = 0;
 
@@ -203,13 +221,6 @@ public class Kirjat implements Iterable<Kirja>{
             throw new UnsupportedOperationException("Me ei poisteta");
         }
     }
-
-
-
-    
-    
-    
-    
     
     /**
      * testi ohjelma luokalle

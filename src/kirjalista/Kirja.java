@@ -31,6 +31,22 @@ public class Kirja implements Cloneable {
     private LocalDate lopetusPvm = LocalDate.now();
 
     
+    /**
+     * Tehd‰‰n klooni kirjasta
+     * @return kloonattu kirja
+     * @example
+     * <pre name="test">
+     * #THROWS CloneNotSupportedException 
+     *   Kirja kirja = new Kirja();
+     *   kirja.parse("2|Valtio|Pratchett, Terry|2009|Haluan lukea|Suomi|324|1|2019-04-12|2019-10-12|");
+     *   Kirja kopio = kirja.clone();
+     *   Object olio = kirja.clone();
+     *   kopio.toString() === kirja.toString();
+     *   kirja.parse("3|Valtio|Joku random|2009|Haluan lukea|Suomi|324|1|2019-04-12|2019-10-12|");
+     *   kopio.toString().equals(kirja.toString()) === false;
+     *   olio instanceof Kirja === true;
+     * </pre>
+     */
     public Kirja clone() throws CloneNotSupportedException {
     	Kirja uusi;
     	uusi = (Kirja) super.clone();
@@ -47,13 +63,28 @@ public class Kirja implements Cloneable {
      * asettaa kirjalle tunnusnumeron
      * @param nr
      */
-    private void setTunnusNro(int nr) {
+    public void setTunnusNro(int nr) {
         tunnusNro = nr;
         if (tunnusNro >= seuraavaNro) seuraavaNro = tunnusNro + 1;
     }
 
     /**
      * muuttaa kirjan tiedot merkkijonoksi
+     * @example
+     * <pre name="test">
+     *  Kirja b1 = new Kirja();
+     *  b1.setTunnusNro(3);
+     *  b1.aseta(1, "Valtio");
+     *  b1.aseta(2, "Pratchett, Terry");
+     *  b1.aseta(3, "5");
+     *  b1.aseta(4, "2020-01-15");
+     *  b1.aseta(5, "2020-02-19");
+     *  b1.aseta(6, "2019");
+     *  b1.aseta(7, "Kesken");
+     *  b1.aseta(8, "Suomi");
+     *  b1.aseta(9, "55");
+     *  b1.toString() === "3|Valtio|Pratchett, Terry|2019|Kesken|Suomi|55|5|2020-01-15|2020-02-19|";
+     * </pre>
      */
     @Override
     public String toString() {

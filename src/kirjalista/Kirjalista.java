@@ -17,18 +17,7 @@ public class Kirjalista {
     public int getKirjoja() {
         return kirjat.getLkm();
     }
-    
-    
-    public void setTiedosto(String nimi) {
-        File dir = new File(nimi);
-        dir.mkdirs();
-        String hakemistonNimi = "";
-        if ( !nimi.isEmpty() ) hakemistonNimi = nimi +"/";
-        kirjat.setTiedostonPerusNimi(hakemistonNimi + "kirjat");
-        avainsanat.setTiedostonPerusNimi(hakemistonNimi + "avainsanat");
-    }
-    
-
+   
     /**
      * lukee kirjat ja avainsanat tiedostoista
      * @throws SailoException
@@ -58,7 +47,8 @@ public class Kirjalista {
      */
     public int poista(Kirja kirja) {
         if (kirja == null ) return 0;
-        int ret = kirjat.poista(kirja.getTunnusNro()); 
+        int ret = kirjat.poista(kirja.getTunnusNro());
+        avainsanat.poistaKaikki(kirja.getTunnusNro());
         return ret; 
     }
 

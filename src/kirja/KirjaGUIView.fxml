@@ -120,7 +120,7 @@
                   <Button fx:id="kirjaMuokkaa" layoutY="36.0" mnemonicParsing="false" onAction="#handleMuokkaaKirja" prefHeight="25.0" prefWidth="163.0" text="Muokkaa valittua" />
                </children>
             </Pane>
-            <Button fx:id="lisaaKirja" mnemonicParsing="false" onAction="#handleUusiKirja" prefHeight="25.0" prefWidth="166.0" text="Lisää kirja" />
+            <Button fx:id="lisaaKirja" mnemonicParsing="false" onAction="#handleLisaaKirja" prefHeight="25.0" prefWidth="166.0" text="Lisää kirja" />
             <Pane prefHeight="104.0" prefWidth="163.0" />
             <Button fx:id="poistaKirja" mnemonicParsing="false" onAction="#handlePoistaKirja" prefHeight="25.0" prefWidth="197.0" text="Poista kirja" />
             <GridPane>
@@ -137,7 +137,7 @@
                   <Button fx:id="lisaaAvainsana" mnemonicParsing="false" onAction="#handleLisaaAvainsana" prefHeight="25.0" prefWidth="180.0" text="Lisää avainsana" GridPane.rowIndex="1" />
                </children>
             </GridPane>
-            <Button fx:id="uusiKirja" mnemonicParsing="false" onAction="#handleLisaaKirja" prefHeight="25.0" prefWidth="166.0" text="Lisää kirja" />
+            <Button fx:id="uusiKirja" mnemonicParsing="false" onAction="#handleUusiKirja" prefHeight="25.0" prefWidth="166.0" text="Lisää kirja" />
          </children>
       </VBox>
    </left>

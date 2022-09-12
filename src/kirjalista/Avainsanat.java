@@ -103,6 +103,13 @@ public class Avainsanat implements Iterable<Avainsana>{
     	return ret;
     }
     
+    public void poistaKaikki(int kirjanro) {
+    	for(Avainsana avs:alkiot) {
+    		if (avs.getKirjaNro() == kirjanro) {
+    			poista(avs);
+    		} 			
+    	}
+    }
     
     /**
      * @return palauttaa avainsanojen lukum‰‰r‰n
@@ -171,16 +178,27 @@ public class Avainsanat implements Iterable<Avainsana>{
 
         }
 
-
+    /**
+     * Asettaa tiedoston perusnimen ilan tarkenninta
+     * @param nimi tallennustiedoston perusnimi
+     */
 	public void setTiedostonPerusNimi(String tied) {
         tiedostonPerusNimi = tied;
 		
 	}
 
+    /**
+     * Palauttaa tiedoston nimen, jota k‰ytet‰‰n tallennukseen
+     * @return tallennustiedoston nimi
+     */
     public String getTiedostonPerusNimi() {
         return tiedostonPerusNimi;
     }
 
+    /**
+     * Palauttaa tiedoston nimen, jota k‰ytet‰‰n tallennukseen
+     * @return tallennustiedoston nimi
+     */
     public String getTiedostonNimi() {
         return getTiedostonPerusNimi() + ".dat";
     }

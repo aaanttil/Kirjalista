@@ -103,7 +103,7 @@ public class KirjaMuokkausGUIController implements ModalControllerInterface<Kirj
         if (kirja.getSivut() == -1 ) {
         	edits[8].setText("");
         } else edits[8].setText(Integer.toString(kirja.getSivut()));
-
+        
         List<Avainsana> avsanat = kirjalista.annaAvainsanat(kirja.getTunnusNro());
         for (Avainsana avs:avsanat) {
         	avainsanat.appendText(avs.getAvainsana() + ",");
