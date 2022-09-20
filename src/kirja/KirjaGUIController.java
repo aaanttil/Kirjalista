@@ -201,9 +201,12 @@ public class KirjaGUIController {
     protected void lisaaKirja() {
         try {
             Kirja uusi = new Kirja();
-            uusi = KirjaMuokkausGUIController.kysyKirja(null, uusi); 
-            if ( uusi == null ) return; 
             uusi.rekisteroi(); 
+            uusi = KirjaMuokkausGUIController.kysyKirja(null, uusi); 
+            if ( uusi == null ) {
+            	poistaKirja(uusi);
+            	return; 
+            }
             kirjalista.lisaa(uusi);
             hae();
             
