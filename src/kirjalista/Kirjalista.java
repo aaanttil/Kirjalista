@@ -3,11 +3,10 @@ package kirjalista;
 import java.io.File;
 import java.util.List;
 
-
 public class Kirjalista {
 	
-    private Kirjat kirjat = new Kirjat();
-    private Avainsanat avainsanat = new Avainsanat(); 
+    public Kirjat kirjat = new Kirjat();
+    public Avainsanat avainsanat = new Avainsanat(); 
     private String hakemisto = "kirjat";
 
     /**
@@ -43,7 +42,17 @@ public class Kirjalista {
     /**
      * poistaa kirjan taulukosta
      * @param nro
-     * @return
+     * @return montako kirjaa poistettiin
+     * @example
+     * <pre name="test">
+     * #THROWS Exception
+     * 	Kirjalista klista = new Kirjalista();
+     * 	Kirja b1 = new Kirja();
+     *  Kirja b2 = new Kirja();
+     * 	klista.lisaa(b1); klista.lisaa(b2);
+     * 	klista.getKirjoja() === 2;
+     *  klista.poista(b1); klista.getKirjoja() === 1;
+     * </pre>
      */
     public int poista(Kirja kirja) {
         if (kirja == null ) return 0;
@@ -54,9 +63,22 @@ public class Kirjalista {
 
     /**
      * poistaa avainsanan listasta
-     * @param nro
-     * @return
-     */
+     * @param avainsana poistettava avainsana
+     * @example
+     * <pre name="test">
+     * #THROWS Exception
+     *   Kirjalista klista = new Kirjalista();
+     *   Avainsana a1 = new Avainsana();
+     *   a1.uusiAvainsana(1, "jee");
+     *   klista.lisaa(a1);  
+     *   List<Avainsana> avs = klista.annaAvainsanat(1);
+     *   klista.avainsanat.getLkm() === 1;
+     *   klista.poista(a1);
+     *   avs = klista.annaAvainsanat(1);
+     *   klista.avainsanat.getLkm() === 0;
+     * </pre>
+     */ 
+
     public void poista(Avainsana avs) {
         avainsanat.poista(avs);
     }
@@ -80,8 +102,8 @@ public class Kirjalista {
     
     /**
      * 
-     * @param i
-     * @return
+     * @param i indeksi
+     * @return palauttaa kirjan indeksistä i
      * @throws IndexOutOfBoundsException
      */
     public Kirja annaKirja(int i) throws IndexOutOfBoundsException {

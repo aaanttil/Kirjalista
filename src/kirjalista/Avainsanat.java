@@ -33,7 +33,7 @@ public class Avainsanat implements Iterable<Avainsana>{
     
     /**
      * lisää avainsanan listaan avainsanoista
-     * @param avs
+     * @param avs lisättävä avainsana
      */
     public void lisaa(Avainsana avs) {
         alkiot.add(avs);
@@ -95,7 +95,19 @@ public class Avainsanat implements Iterable<Avainsana>{
     }
 
     /**
-     * Poista avainsana listasta
+     * Poistaa avainsana listasta
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException 
+     * #import java.io.File;
+     * Avainsanat avainsanat = new Avainsanat();
+     * Avainsana a1 = new Avainsana();
+     * Avainsana a2 = new Avainsana();
+     * Avainsana a3 = new Avainsana();
+     * avainsanat.lisaa(a1); avainsanat.lisaa(a2);
+     * avainsanat.poista(a3) === false; avainsanat.getLkm() === 2;
+     * avainsanat.poista(a2) === true; avainsanat.getLkm() === 1;
+     * </pre>
      */
     public boolean poista(Avainsana avs) {
     	boolean ret = alkiot.remove(avs);
@@ -103,6 +115,10 @@ public class Avainsanat implements Iterable<Avainsana>{
     	return ret;
     }
     
+    /**
+     * poistaa kaikki kirjaan liitetyt avainsanat
+     * @param kirjanro
+     */
     public void poistaKaikki(int kirjanro) {
     	for(Avainsana avs:alkiot) {
     		if (avs.getKirjaNro() == kirjanro) {

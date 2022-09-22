@@ -14,6 +14,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.Iterator;
+
+
 
 public class Kirjat implements Iterable<Kirja>{
 	
@@ -46,7 +49,20 @@ public class Kirjat implements Iterable<Kirja>{
      * @throws SailoException jos tietorakenne on jo täynnä
      * @example
      * <pre name="test">
-     * 	
+     * #THROWS SailoException 
+     * Kirjat kirjat = new Kirjat();
+     * Kirja b1 = new Kirja(); Kirja b2 = new Kirja();
+     * kirjat.getLkm() === 0;
+     * kirjat.lisaa(b1); kirjat.getLkm() === 1;
+     * kirjat.lisaa(b2); kirjat.getLkm() === 2;
+     * kirjat.lisaa(b1); kirjat.getLkm() === 3;
+     * Iterator<Kirja> it = kirjat.iterator();     
+     * it.next() === b1;
+     * it.next() === b2; 
+     * it.next() === b1; 
+     * kirjat.lisaa(b1); kirjat.getLkm() === 4;
+     * kirjat.lisaa(b2); kirjat.getLkm() === 5;
+     * </pre>
      */
     public void lisaa(Kirja kirja) throws SailoException {
         if (lkm >= alkiot.length) alkiot = Arrays.copyOf(alkiot, lkm+20);
@@ -59,6 +75,15 @@ public class Kirjat implements Iterable<Kirja>{
      * poistaa kirjan, jolla parametrina annettu tunnusnumero
      * @param id poistettavan kirjan tunnusnumero
      * @return 1 jos poistettiiinn, 0 jos ei löydy
+     * @example 
+     * <pre name="test"> 
+     * #THROWS SailoException  
+     * Kirjat kirjat = new Kirjat();
+     * Kirja b1 = new Kirja();
+     * kirjat.lisaa(b1); kirjat.getLkm() === 1;
+     * kirjat.poista(b1.getTunnusNro()); kirjat.getLkm() === 0;
+     * Kirja b2 = new Kirja();
+     * kirjat.lisaa(b2); kirjat.getLkm() === 1;
      */
     public int poista(int id) {
     	int ind = etsiId(id);
@@ -114,9 +139,29 @@ public class Kirjat implements Iterable<Kirja>{
     }
 
     /**
-     * korvaa kirjan
+     * korvaa kirjan tietorakenteessa
+     * etsii kirjaa tunnusnumerolla, jos ei löydy. niin lisätään uutena
      * @param kirja korvattava kirja
      * @throws SailoException
+     * <pre name="test">
+     * #THROWS SailoException,CloneNotSupportedException
+     * #PACKAGEIMPORT
+     * Kirjat kirjat = new Kirjat();
+     * Kirja b1 = new Kirja(), b2 = new Kirja();
+     * b1.rekisteroi(); b2.rekisteroi();
+     * kirjat.getLkm() === 0;
+     * kirjat.korvaaTaiLisaa(b1); kirjat.getLkm() === 1;
+     * kirjat.korvaaTaiLisaa(b2); kirjat.getLkm() === 2;
+     * Kirja b3 = b1.clone();
+     * Iterator<Kirja> it = kirjat.iterator();
+     * it.next() == b1 === true;
+     * kirjat.korvaaTaiLisaa(b3); kirjat.getLkm() === 2;
+     * it = kirjat.iterator();
+     * Kirja j0 = it.next();
+     * j0 === b3;
+     * j0 == b3 === true;
+     * j0 == b1 === false;
+     * </pre>
      */
     public void korvaaTaiLisaa(Kirja kirja) throws SailoException {
         int id = kirja.getTunnusNro();
@@ -199,8 +244,23 @@ public class Kirjat implements Iterable<Kirja>{
     
     /**
      * luokka kirjojen iteroimiseksi
-     * 
-     *
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException 
+     * #PACKAGEIMPORT
+     * #import java.util.*;
+     * Kirjat kirjat = new Kirjat();
+     * Kirja b1 = new Kirja(), b2 = new Kirja();
+     * b1.rekisteroi(); b2.rekisteroi();
+     * kirjat.lisaa(b1); 
+     * kirjat.lisaa(b2); 
+     * kirjat.lisaa(b1); 
+     * Iterator<Kirja>  i=kirjat.iterator();
+     * i.next() == b1  === true;
+     * i.next() == b2  === true;
+     * i.next() == b1  === true;
+     * i.next();  #THROWS NoSuchElementException
+     * </pre>
      */
     public class KirjatIterator implements Iterator<Kirja> {
         private int kohdalla = 0;

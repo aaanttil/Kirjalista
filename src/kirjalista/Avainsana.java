@@ -26,6 +26,15 @@ public class Avainsana {
         this.kirjaNro = kirjaNro;
     }
     
+     /**
+     * Kiinnittää kirjaan avainsanan
+     * @param nro
+     * @param avsana
+     */
+    public void uusiAvainsana(int nro, String avsana) {
+        kirjaNro = nro;
+        avainsana = avsana;
+    }
     /**
      * tulostetaan avainsana
      * @param out tietovirta johon tulostetaan
@@ -134,13 +143,5 @@ public class Avainsana {
     }
     
     
-    /**
-     * Kiinnittää kirjaan avainsanan
-     * @param nro
-     * @param avsana
-     */
-    public void uusiAvainsana(int nro, String avsana) {
-        kirjaNro = nro;
-        avainsana = avsana;
-    }
+
 }
