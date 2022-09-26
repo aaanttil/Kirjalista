@@ -120,10 +120,12 @@ public class Avainsanat implements Iterable<Avainsana>{
      * @param kirjanro
      */
     public void poistaKaikki(int kirjanro) {
-    	for(Avainsana avs:alkiot) {
-    		if (avs.getKirjaNro() == kirjanro) {
-    			poista(avs);
-    		} 			
+    	Iterator<Avainsana> itr = alkiot.iterator();            
+    	while(itr.hasNext()){
+    	    Avainsana avs = itr.next();
+    	    if(avs.getKirjaNro() == kirjanro){
+    	        itr.remove();
+    	    }
     	}
     }
     

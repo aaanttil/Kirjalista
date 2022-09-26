@@ -88,19 +88,19 @@ public class KirjaMuokkausGUIController implements ModalControllerInterface<Kirj
         
         edits[0].setText(kirja.getNimi());
         edits[1].setText(kirja.getKirjailija());
-        if (kirja.getArvosana() == -1 ) {
+        if (kirja.getArvosana() == 0 ) {
             edits[2].setText("");
         } else edits[2].setText(Integer.toString(kirja.getArvosana()));
         edits[3].setText(kirja.getAloitusPvm().toString());
         if (kirja.getLopetusPvm() == null) {
         	edits[4].setText("");
         } else edits[4].setText(kirja.getLopetusPvm().toString());
-        if (kirja.getVuosi() == -1 ) {
+        if (kirja.getVuosi() == 0 ) {
         	edits[5].setText("");
         } else edits[5].setText(Integer.toString(kirja.getVuosi()));       
         edits[6].setText(kirja.getTila());
         edits[7].setText(kirja.getKieli());
-        if (kirja.getSivut() == -1 ) {
+        if (kirja.getSivut() == 0 ) {
         	edits[8].setText("");
         } else edits[8].setText(Integer.toString(kirja.getSivut()));
         

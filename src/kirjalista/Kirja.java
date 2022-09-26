@@ -1,11 +1,13 @@
 package kirjalista;
 
+import kirjalista.VuosiTarkistus;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 import fi.jyu.mit.ohj2.Mjonot;
+
 
 /**
  * Kirjalistan kirja joka osaa mm. itse huolehtia tunnusNro:staan.
@@ -20,12 +22,12 @@ public class Kirja implements Cloneable {
 	/// private int kirjaNro;
 	private String kirjanimi = "";
 	private String kirjailija = "";
-	private int vuosi = -1;
+	private int vuosi = 0;
 	private String kieli = "";
-	private int sivumaara = -1;
+	private int sivumaara = 0;
     private static int seuraavaNro = 1;
     private String tila = "";
-    private int arvosana = -1;
+    private int arvosana = 0;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private LocalDate aloitusPvm = LocalDate.now();
     private LocalDate lopetusPvm = LocalDate.now();
@@ -104,6 +106,16 @@ public class Kirja implements Cloneable {
     /**
      * pilkkoo merkkijonon kirjan tiedoiksi
      * @param rivi
+     * @example
+     * <pre name="test">
+     *  Kirja b1 = new Kirja();
+     *  b1.vastaaValtio();
+     * 	String jono = b1.toString();; 
+     * 	b1.parse(jono);
+     *  b1.getNimi() === "Valtio";
+     *  b1.getKirjailija() === "Pratchett, Terry";
+     *  b1.getKieli() === "Suomi"
+     *  </pre>
      */
     public void parse(String rivi) {
         var sb = new StringBuilder(rivi);
@@ -335,7 +347,11 @@ public class Kirja implements Cloneable {
         	}
             return null;
         case 6:
-            vuosi = Integer.parseInt(tjono);
+        	if (tjono.equals("-")) {return null;};
+        	int y = Integer.parseInt(tjono);
+            VuosiTarkistus yyyy = new VuosiTarkistus();
+            int yy = yyyy.tarkista(y);
+            vuosi = yy;
             return null;
         case 7:
             tila = tjono;

@@ -352,6 +352,7 @@ public class KirjaGUIController {
      */
     public void poistaKirja(Kirja poistettava) {
     	if (poistettava == null) return;
+    	System.out.println(poistettava.getTunnusNro());
     	kirjalista.poista(poistettava);
     	tableKaikki.clear();
 		tableLuetut.clear();

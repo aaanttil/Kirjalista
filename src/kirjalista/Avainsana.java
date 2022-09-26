@@ -84,6 +84,12 @@ public class Avainsana {
 
     /**
      * Muuttaa avainsanan tiedot merkkijonoksi tiedostoon tallentamista varten
+     * @example
+     * <pre name="test">
+     * 	Avainsana avs = new Avainsana();
+     * 	avs.uusiAvainsana(2,"Rikollisuus");
+     * 	avs.toString().equals("1|2|Rikollisuus");
+     * </pre>
      */
     @Override
     public String toString() {
@@ -93,6 +99,14 @@ public class Avainsana {
     /**
      * Erottaa merkkijonon avainsanan attribuuteiksi
      * @param rivi
+     * @example
+     * <pre name="test">
+     * 	Avainsana avs = new Avainsana();
+     * 	String jono = "2|3|Murha"; 
+     * 	avs.parse(jono);
+     *  avs.getKirjaNro() === 3;
+     *  avs.getAvainsana() === "Murha";
+     *  </pre>
      */
     public void parse(String rivi) {
         StringBuffer sb = new StringBuffer(rivi);

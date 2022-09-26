@@ -33,6 +33,24 @@ public class Kirjalista {
      * korvaa kirjan
      * @param kirja korvatta kirja
      * @throws SailoException
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException 
+     *  Kirjalista klista = new Kirjalista(); 
+     *  Kirja b1 = new Kirja();
+     *  b1.rekisteroi();
+     *  klista.lisaa(b1);
+     *  klista.getKirjoja() === 1;
+     *  Kirja b2 = new Kirja();
+     *  b2.rekisteroi();
+     *  klista.korvaaTaiLisaa(b2);
+     *  klista.getKirjoja() === 2;
+     *  Kirja b3 = new Kirja();
+     *  b3.rekisteroi();
+     *  b3.setTunnusNro(b1.getTunnusNro());
+     *  klista.korvaaTaiLisaa(b3);
+     *  klista.getKirjoja() === 2;
+     * </pre>
      */
     public void korvaaTaiLisaa(Kirja kirja) throws SailoException { 
         kirjat.korvaaTaiLisaa(kirja); 
@@ -54,11 +72,10 @@ public class Kirjalista {
      *  klista.poista(b1); klista.getKirjoja() === 1;
      * </pre>
      */
-    public int poista(Kirja kirja) {
-        if (kirja == null ) return 0;
-        int ret = kirjat.poista(kirja.getTunnusNro());
+    public void poista(Kirja kirja) {
+        if (kirja == null ) return;
+        kirjat.poista(kirja.getTunnusNro());
         avainsanat.poistaKaikki(kirja.getTunnusNro());
-        return ret; 
     }
 
     /**
@@ -87,6 +104,14 @@ public class Kirjalista {
      * lis‰‰ kirjan kirjat taulukkoon
      * @param kirja
      * @throws SailoException
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     *  Kirjalista kl = new Kirjalista();  
+     *  kl.getKirjoja() === 0; 
+     *  Kirja b1 = new Kirja();
+     *  kl.lisaa(b1);
+     *  kl.getKirjoja() === 1; 
      */
     public void lisaa(Kirja kirja) throws SailoException {
         kirjat.lisaa(kirja);
