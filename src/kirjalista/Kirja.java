@@ -332,7 +332,10 @@ public class Kirja implements Cloneable {
         	kirjailija = tjono;
             return null;
         case 3:
+        	try {
             arvosana = Integer.parseInt(tjono);
+        	} catch (Exception e) {
+        	}
             return null;
         case 4:
         	try {
@@ -360,7 +363,10 @@ public class Kirja implements Cloneable {
             kieli = tjono;
             return null;
         case 9:
+        	try {
             sivumaara = Integer.parseInt(tjono);
+        	} catch (Exception e) {
+        	}
             return null;
         case 10:
             return null;
